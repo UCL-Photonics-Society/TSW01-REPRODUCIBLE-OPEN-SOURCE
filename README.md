@@ -1,6 +1,8 @@
 
 # [Transferable Skills Workshops] - Good Practices for Reproducible Open Source Code
 
+
+
 ---
 
 ## Why this Workshop?
@@ -21,6 +23,27 @@ This leads to higher-quality work and fosters collaboration, allowing others to 
 - Restructure repositories using best practices.
 - Create and integrate a LICENSE file for open-source compliance.
 - Develop and execute unit tests to ensure code reliability.
+  
+---
+
+## Table of Contents
+- [Prerequisites](#prerequisites)
+- [Lab Instructions](#lab-instructions)
+   - [How Does the Lab Work?](#how-does-the-lab-work)
+   - [Tasks](#tasks)
+      - [0️⃣ - Initialize the Lab](#0️⃣---initialize-the-lab)
+      - [1️⃣ - Clone the Repository Locally](#1️⃣---clone-the-repository-locally)
+      - [2️⃣ - Setup a Virtual Environment and Manage Dependencies with Poetry](#2️⃣---setup-a-virtual-environment-and-manage-dependencies-with-poetry)
+      - [3️⃣ - Restructure the Repository](#3️⃣---restructure-the-repository)
+      - [4️⃣ - Linting and Formatting](#4️⃣---linting-and-formatting)
+      - [5️⃣ - Add a LICENSE File](#5️⃣---add-a-license-file)
+      - [6️⃣ - Write Tests](#6️⃣---write-tests)
+      - [7️⃣ - Check Completion and Submit](#7️⃣---check-completion-and-submit)
+- [Contributions](#contributions)
+   - [Contributors](#contributors)
+   - [Maintainers](#maintainers)
+- [Licence](#licence)
+
 
 ---
 
@@ -89,7 +112,7 @@ Currently, the project lacks reproducibility. Let’s fix that with **Poetry**:
    - **Version**: `0.0.1`  
    - **Description**: Add a short description.  
    - **Author/License**: Press Enter to skip.  
-   - **Python versions**: Enter `>=3.10` (meaning at least 3.10).  
+   - **Python versions**: Enter `^3.<your_version>` (at least 3.10). 
    - For dependencies: Enter `no` for both.
 
 > [!TIP]
@@ -177,32 +200,55 @@ In this task, we will ensure your codebase follows a consistent style and adhere
 
 1. Add Ruff to the Project as a development dependencies
    - Use Poetry to add Ruff as a development dependency:
-```bash
-poetry add ruff --group dev
-```
+   ```bash
+   poetry add ruff --group dev
+   ```
 
-2. Check your code for linting issues by running:
-   - Ruff will output a list of issues with line numbers and suggested fixes.
-```bash
-poetry run ruff check .
-```
+2. Add Ruff rules to the `pyproject.toml` file
+   - Formatting rules dictate the style of your code, keep in mind that it is up to you to decide which to enforce for your projects. By default, Ruff doesn't have any formatting rules, so we need to select those we want to apply. 
+   - Open `pyproject.toml` and add the following rules (you can find what they mean [here](https://docs.astral.sh/ruff/rules/)):
+   ```toml
+   [tool.ruff]
+   [tool.ruff.lint]
+   select = [
+       # pycodestyle
+       "E",
+       # Pyflakes
+       "F",
+       # pyupgrade
+       "UP",
+       # flake8-bugbear
+       "B",
+       # flake8-simplify
+       "SIM",
+       # pep8-naming
+       "N",
+   ]
+   ```
 
-3. Fix Issues by either:
-   - Edit your files to address these issues, or
-   - Automatically fix the issues by running:
-```bash
-poetry run ruff check . --fix
-```
-4. Commit Your Changes
-   - Once all issues are resolved, commit your changes:
+3. Check your code for linting issues by running:
+   - Ruff will output a list of issues with line numbers and suggested fixes. 
+   ```bash
+   poetry run ruff check .
+   ```
 
-```bash
-git add .
-git commit -m "style: apply linting fixes using Ruff"
-git push
-```
+4. Fix the formatting issues:
+   - Run the following command and notice that many errors were fixed automatically:
+   ```bash
+   poetry run ruff format
+   ```
+   - Look at the error log and fix all remaining issues by edditing the files manually.
+   
 
 
+5. Commit Your Changes
+   - Once running ruff format stops returning errors because all issues have been resolved, commit your changes:
+
+   ```bash
+   git add .
+   git commit -m "style: apply linting fixes using Ruff"
+   git push
+   ```
 
 ---
 
@@ -307,6 +353,15 @@ def test_generate_sech(setup_waveform):
     assert np.isclose(np.max(waveform), expected_max, atol=1e-3), f"Sech max: {np.max(waveform)} != {expected_max}"
    ```
 
+> [!TIP]
+> If running `poetry run pytest tests/` returns a `ModuleNotFoundError`, you can fix it by adding the following to `pyproject.toml`:
+> ```yaml
+> [tool.pytest.ini_options]
+>  pythonpath = [
+>    ".", "src",
+>  ]
+> ```
+
 3. Commit and push changes:  
    ```bash
    git status  
@@ -363,3 +418,29 @@ If you did each task correctly, all of the checks in the pull request main->feed
 ### Maintainers
 
 For any questions, reach out to [David Gerard](https://github.com/David-GERARD) at david.gerard.23@ucl.ac.uk.
+
+---
+
+## Licence
+
+MIT License
+
+Copyright (c) 2024 David Gerard
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

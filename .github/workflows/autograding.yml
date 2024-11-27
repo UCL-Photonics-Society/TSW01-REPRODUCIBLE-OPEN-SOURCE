@@ -3,7 +3,7 @@ name: Assignment Autograding
 on:
   push:
     branches:
-      - main
+      - '**'
 
 jobs:
   task2:
@@ -17,13 +17,14 @@ jobs:
 
     # Step 2: Set up Python
     - name: Setup Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
-        python-version: "3.10"
+        python-version-file: 'pyproject.toml' # Read python version from a file pyproject.toml
 
     # Step 3: Install Poetry
     - name: Install Poetry
       run: |
+        python --version
         python -m pip install --upgrade pip
         pip install poetry
 
@@ -53,9 +54,9 @@ jobs:
 
     # Step 2: Set up Python
     - name: Setup Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
-        python-version: "3.10"
+        python-version-file: 'pyproject.toml' # Read python version from a file pyproject.toml
 
     # Step 3: Install Poetry
     - name: Install Poetry
@@ -90,9 +91,9 @@ jobs:
 
     # Step 2: Set up Python
     - name: Setup Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
-        python-version: "3.10"
+        python-version-file: 'pyproject.toml' # Read python version from a file pyproject.toml
 
     # Step 3: Install Poetry
     - name: Install Poetry
@@ -122,9 +123,9 @@ jobs:
 
     # Step 2: Set up Python
     - name: Setup Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
-        python-version: "3.10"
+        python-version-file: 'pyproject.toml' # Read python version from a file pyproject.toml
 
     # Step 3: Install Poetry
     - name: Install Poetry
@@ -159,9 +160,9 @@ jobs:
 
     # Step 2: Set up Python
     - name: Setup Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
-        python-version: "3.10"
+        python-version-file: 'pyproject.toml' # Read python version from a file pyproject.toml
 
     # Step 3: Install Poetry
     - name: Install Poetry
@@ -195,9 +196,9 @@ jobs:
 
     # Step 2: Set up Python
     - name: Setup Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
-        python-version: "3.10"
+        python-version-file: 'pyproject.toml' # Read python version from a file pyproject.toml
 
     # Step 3: Install Poetry
     - name: Install Poetry

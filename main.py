@@ -73,7 +73,7 @@ def generate_sech(t, pulsewidth):
     return sechpulse
 
 class OpticalSignal:
-    def __init__(self, wavelength, ts, Et):
+    def __init__(self, wavelength, ts, et):
         """
         Initialize the OpticalSignal class.
 
@@ -84,22 +84,22 @@ class OpticalSignal:
         """
         self.wavelength = wavelength
         self.ts = ts
-        self.Et = np.array(Et, dtype=complex)
+        self.et = np.array(et, dtype=complex)
 
     @property
-    def Pt(self):
+    def pt(self):
         """Power of the signal in time."""
-        return np.abs(self.Et) ** 2
+        return np.abs(self.et) ** 2
 
     @property
     def meanpower(self):
         """Mean power of the signal."""
-        return np.mean(np.abs(self.Et) ** 2)
+        return np.mean(np.abs(self.et) ** 2)
 
     @property
-    def N(self):
+    def n(self):
         """Number of samples in each polarization."""
-        return self.Et.size
+        return self.et.size
 
     @property
     def frequency(self):
@@ -107,7 +107,7 @@ class OpticalSignal:
         c = 299792485  # Speed of light in m/s
         return c / self.wavelength
 
-def apply_dispersion(SigIn, CD):
+def apply_dispersion(sigin, cd):
     """
     Applies chromatic dispersion to an input optical signal.
 
@@ -119,24 +119,24 @@ def apply_dispersion(SigIn, CD):
     OpticalSignal: Output signal with dispersion applied.
     """
     # Copy the input signal to the output
-    SigOut = SigIn
-    N = SigIn.Et.size
+    sigOut = sigin
+    N = sigin.et.size
 
     # Conversion from D to beta_2
-    beta2L = -SigIn.wavelength**2 / (2 * np.pi * c) * (CD * 1e-12 / 1e-9)
+    beta2L = -sigin.wavelength**2 / (2 * np.pi * c) * (cd * 1e-12 / 1e-9)
 
     # Frequency vector in the Fourier domain
-    Omega = 2 * np.pi / (N * SigIn.ts) * np.concatenate((np.arange(0, N//2), np.arange(-N//2, 0)))
+    omega = 2 * np.pi / (N * sigin.ts) * np.concatenate((np.arange(0, N//2), np.arange(-N//2, 0)))
 
     # Dispersion operator in the frequency domain
-    DD = 1j / 2 * beta2L * Omega**2
+    dd = 1j / 2 * beta2L * omega**2
 
     # Apply dispersion in the frequency domain
-    SigOut.Et = np.fft.ifft(SigIn.Et)
-    SigOut.Et = np.exp(DD) * SigOut.Et
-    SigOut.Et = np.fft.fft(SigOut.Et)
+    sigOut.Et = np.fft.ifft(sigin.et)
+    sigOut.Et = np.exp(dd) * sigOut.et
+    sigOut.Et = np.fft.fft(sigOut.et)
 
-    return SigOut
+    return sigOut
 
 
 if __name__ == '__main__':
@@ -166,10 +166,10 @@ if __name__ == '__main__':
     # Plot Amplitude and Power
     plt.figure(figsize=(12, 6))
     plt.subplot(1, 2, 1)
-    plt.plot(t * 1e12, np.abs(pulse_g.Et), label='Gaussian')
-    plt.plot(t * 1e12, np.abs(pulse_l.Et), label='Lorentzian')
-    plt.plot(t * 1e12, np.abs(pulse_s.Et), label='Hyp. sech')
-    plt.plot(t * 1e12, np.abs(pulse_sq.Et), label='Square')
+    plt.plot(t * 1e12, np.abs(pulse_g.et), label='Gaussian')
+    plt.plot(t * 1e12, np.abs(pulse_l.et), label='Lorentzian')
+    plt.plot(t * 1e12, np.abs(pulse_s.et), label='Hyp. sech')
+    plt.plot(t * 1e12, np.abs(pulse_sq.et), label='Square')
     plt.title('Amplitude')
     plt.xlabel('Time (ps)')
     plt.ylabel('Amplitude')
@@ -177,10 +177,10 @@ if __name__ == '__main__':
     plt.grid(True)
 
     plt.subplot(1, 2, 2)
-    plt.plot(t * 1e12, pulse_g.Pt, label='Gaussian')
-    plt.plot(t * 1e12, pulse_l.Pt, label='Lorentzian')
-    plt.plot(t * 1e12, pulse_s.Pt, label='Hyp. sech')
-    plt.plot(t * 1e12, pulse_sq.Pt, label='Square')
+    plt.plot(t * 1e12, pulse_g.pt, label='Gaussian')
+    plt.plot(t * 1e12, pulse_l.pt, label='Lorentzian')
+    plt.plot(t * 1e12, pulse_s.pt, label='Hyp. sech')
+    plt.plot(t * 1e12, pulse_sq.pt, label='Square')
     plt.title('Power')
     plt.xlabel('Time (ps)')
     plt.ylabel('Power')
