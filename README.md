@@ -107,6 +107,13 @@ Currently, the project lacks reproducibility. Let’s fix that with **Poetry**:
    ```bash
    poetry init
    ```
+  > [!CAUTION]
+  > On some versions of git bash, running `poetry init` might result in a `command not found error`. If this is the case, run:
+  > ```bash
+  >  python -m poetry init
+  >  ```
+  >  If you are in this situation, you will need to replace `poetry` with `python -m poetry` in every command for the rest of the workshop. 
+
    Follow the prompts:  
    - **Package name**: `opticaldisp`  
    - **Version**: `0.0.1`  
@@ -114,6 +121,8 @@ Currently, the project lacks reproducibility. Let’s fix that with **Poetry**:
    - **Author/License**: Press Enter to skip.  
    - **Python versions**: Enter `^3.<your_version>` (at least 3.10). 
    - For dependencies: Enter `no` for both.
+  
+
 
 > [!TIP]
 > A `pyproject.toml` file is now created with your project information.
